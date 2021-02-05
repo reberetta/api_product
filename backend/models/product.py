@@ -4,7 +4,7 @@ from sqlalchemy.orm import validates
 from backend.models.base_model import BaseModel
 
 
-class Category(BaseModel):
+class Product(BaseModel):
     __tablename__ = 'PRODUCT'
 
     name = Column('name', String(length=100), nullable=False)
