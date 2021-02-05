@@ -7,6 +7,10 @@ from backend.controllers.base_controller import BaseController
 from backend.controllers.product_controller import ProductController
 from backend.models.product import Product
 
+@pytest.fixture
+def create_product():
+    product = Product('Name Test', 'Description Test', 67.78)
+    return product
 
 @pytest.fixture
 def create_instance():
@@ -21,27 +25,18 @@ def test_read_all_return_list(create_instance):
     result = create_instance.read_all()
     assert isinstance(result, list)
 
-def test_create_product(create_instance):
-    name = "Nome"
-    description = "Descricao"
-    price = 54.12
-    prod = Product(name, description, price)
-
-    result = create_instance.create(prod)
+def test_create_product(create_instance, create_product):
+    result = create_instance.create(create_product)
 
     assert result.id_ is not None
-    assert result.name == name
-    assert result.description == description
-    assert result.price == price
+    assert result.name == "Name Test"
+    assert result.description == 'Description Test'
+    assert result.price == 67.78
 
     create_instance.delete(result)
 
-def test_update_product(create_instance):
-    name = "Nome"
-    description = "Descrição"
-    price = 12.92
-    prod = Product(name, description, price)
-    created = create_instance.create(prod)
+def test_update_product(create_instance, create_product):
+    created = create_instance.create(create_product)
 
     name2 = "Novo"
     description2 = "Outra"
@@ -58,12 +53,8 @@ def test_update_product(create_instance):
 
     create_instance.delete(result)
 
-def test_delete_product(create_instance):
-    name = "Nome"
-    description = "Descrição"
-    price = 78.98
-    prod = Product(name, description, price)
-    created = create_instance.create(prod)
+def test_delete_product(create_instance, create_product):
+    created = create_instance.create(create_product)
 
     create_instance.delete(created)
 
@@ -71,19 +62,15 @@ def test_delete_product(create_instance):
         create_instance.read_by_id(created.id_)
         assert str(error.value) == 'Object not found in the database.'
 
-def test_read_by_id_return_product(create_instance):
-    name = "Nome"
-    description = "Descrição"
-    price = 782.23
-    prod = Product(name, description, price)
-    created = create_instance.create(prod)
+def test_read_by_id_return_product(create_instance, create_product):
+    created = create_instance.create(create_product)
 
     result = create_instance.read_by_id(created.id_)
 
     assert isinstance(result, Product)
-    assert result.name == name
-    assert result.description == description
-    assert result.price == price
+    assert result.name == "Name Test"
+    assert result.description == 'Description Test'
+    assert result.price == 67.78
 
     create_instance.delete(created)
 
