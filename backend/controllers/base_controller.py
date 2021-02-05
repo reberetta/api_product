@@ -3,10 +3,10 @@ from backend.models.base_model import BaseModel
 
 
 class BaseController:
-    def __init__(self, dao: BaseModel) -> None:
+    def __init__(self, dao: BaseDao) -> None:
         self.__dao = dao
 
-    def save(self, model: BaseModel) -> BaseModel:
+    def create(self, model: BaseModel) -> BaseModel:
         return self.__dao.save(model)
 
     def read_all(self) -> list:
@@ -17,3 +17,6 @@ class BaseController:
 
     def delete(self, model: BaseModel) -> None:
         self.__dao.delete(model)
+
+    def update(self, model: BaseModel) -> BaseModel:
+        return self.__dao.save(model)
