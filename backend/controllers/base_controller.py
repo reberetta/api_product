@@ -13,7 +13,10 @@ class BaseController:
         return self.__dao.read_all()
 
     def read_by_id(self, id_: int) -> BaseModel:
-        return self.__dao.read_by_id(id_)
+        result = self.__dao.read_by_id(id_)
+        if result:
+            return result
+        raise Exception('Object not found in the database.')
 
     def delete(self, model: BaseModel) -> None:
         self.__dao.delete(model)
